@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <meta http-equiv="refresh" content="30"/> -->
+
+        <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-storage.js"></script>
+        <!-- <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase.js"></script> -->
+
+        <script defer src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+
+        <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+
+
+        <title>Login</title>
+        <link rel="stylesheet" href="Loginstyle.css"/> 
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&display=swap" rel="stylesheet"> 
+    </head>
+    <body>
+        <div id="login_div" class = "main-div">
+            <h2>VEIYON</h2>
+            <input type="email" placeholder="Email..." id ="email_field"/>
+            <input type="password" placeholder="Password..."id ="password_field"/>
+            
+            <button onclick="Login()">Login</button>
+        </div>
+        
+        <div id="user_div" class="loggedin-div">
+            <h3>Welcome to veiyon</h3>
+        </div>
+
+        <script>
+            var firebaseConfig = {
+            apiKey: "AIzaSyC-1Lll_F6gKAOtgqHuaHaDWEfd0v78r6w",
+            authDomain: "veiyon.firebaseapp.com",
+            databaseURL: "https://veiyon.firebaseio.com",
+            projectId: "veiyon",
+            storageBucket: "veiyon.appspot.com",
+            messagingSenderId: "1086340035914",
+            appId: "1:1086340035914:web:e01b1cd32281ce23ddfdb3",
+            measurementId: "G-WEFEQG4K09"
+        };
+        firebase.initializeApp(firebaseConfig);
+        </script>
+        <script src="auth.js"></script>
+    </body>
+
+
+</html>

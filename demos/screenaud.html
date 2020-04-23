@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Student Conference</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <style>
+    ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgb(231, 228, 228);
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: rgb(189, 189, 189);
+}
+
+.active {
+  background-color: rgb(101, 175, 236);
+}
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: rgb(0, 0, 0);
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: rgb(89, 186, 241);
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content1 {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content1 a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown-content1 a:hover {
+  background-color: #ddd;
+}
+
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropdown-content1 {
+  display: block;
+}
+
+input {
+
+border: 1px solid #ccc;
+padding-left: 20px;
+border-radius: 5px;
+background: #fff;
+padding: 15px;
+outline: none;
+width:170px;
+height: 8px;
+margin-bottom: 20px; 
+}
+
+input:hover{
+border:1.5px solid tomato;
+}
+button {
+    border: 1px solid blue;
+    color: #008CBA;
+    padding: 8px 20px;
+    text-align: center;
+    background-color: whitesmoke;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    border-radius: 2px;
+    cursor: pointer;
+    }
+button:hover {
+background-color:whitesmoke;
+border: 1.5px solid tomato;
+color: tomato;
+
+}
+button:active {
+position:relative;
+top:1px;
+}
+
+button[disabled], input[disabled] {
+display: none;
+background: transparent!important;
+box-shadow: none!important;
+text-shadow: none!important;
+color: #dcd7d7!important;
+border: 1px solid #dcd7d7!important;
+cursor: not-allowed!important;
+}
+
+
+</style>
+  <script src="/demos/menu.js"></script>
+</head>
+<body>
+    <ul>
+        <img src="v.png" width="50px" align="left" hspace="20">
+          <div class="dropdown">
+            <button class="dropbtn">ClassRoom 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+              <a href="index.html">Conference</a>
+              <a href="#">Attendance</a>
+              <a href="upload.html">Docs</a>
+            </div>
+          </div> 
+          <div class="dropdown">
+            <button class="dropbtn">Exams 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+              <a href="#">My Exams</a>
+              <a href="#">Result</a>
+            </div>
+          </div> 
+          
+          <div class="dropdown" style="float: right;">
+            <button class="dropbtn">SDR
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content1">
+            <a href="card.html">Profile </a>
+            <a href="#">logout</a>
+        
+            </div>
+            </div>
+        </ul>
+        <br>
+  <section class="make-center" style="text-align: center;">
+    <input type="text" id="room-id1" value="error.." autocorrect=off autocapitalize=off size=20>
+    <button id="open-room1">Open Conference</button>
+    <button id="join-room1">Join Conference</button>
+    <button id="exit" onclick="Exitnow()">exit</button>
+    <p id="open-or-join-room1"></p>
+
+    <div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;"></div>
+
+    <div id="audios-container"></div>
+  </section>
+
+
+<script src="/dist/RTCMultiConnection.min.js"></script>
+<script src="/node_modules/webrtc-adapter/out/adapter.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<link rel="stylesheet" href="/dev/getHTMLMediaElement.css">
+<script src="/dev/getHTMLMediaElement.js"></script>
+<script>
+
+document.getElementById('open-room1').onclick = function() {
+    disableInputButtons();
+    connection1.open(document.getElementById('room-id1').value, function() {
+       
+    });
+};
+
+document.getElementById('join-room1').onclick = function() {
+    disableInputButtons();
+    connection1.join(document.getElementById('room-id1').value);
+};
+
+document.getElementById('open-or-join-room1').onclick = function() {
+    disableInputButtons();
+    connection1.openOrJoin(document.getElementById('room-id1').value, function(isRoomExist, roomid1) {
+        if (!isRoomExist) {
+            showRoomURL(roomid1);
+        }
+    });
+};
+
+var time = 800;
+function Exitnow(){
+    localStorage.clear()
+    setTimeout(function(){
+        window.location.reload(true)
+    },time)
+}
+
+
+var connection1 = new RTCMultiConnection();
+connection1.socketURL = '/';
+
+connection1.socketMessageEvent = 'audio';
+
+connection1.session = {
+    audio: true,
+    video: false
+};
+
+connection1.mediaConstraints = {
+    audio: true,
+    video: false
+};
+
+connection1.sdpConstraints.mandatory = {
+    OfferToReceiveAudio: true,
+    OfferToReceiveVideo: false
+};
+
+connection1.iceServers = [{
+    'urls': [
+        'stun:stun.l.google.com:19302',
+        'stun:stun1.l.google.com:19302',
+        'stun:stun2.l.google.com:19302',
+        'stun:stun.l.google.com:19302?transport=udp',
+    ]
+}];
+
+connection1.audiosContainer = document.getElementById('audios-container');
+connection1.onstream = function(event) {
+    var width1 = parseInt(connection1.audiosContainer.clientWidth / 2) - 20;
+    var mediaElement1 = getHTMLMediaElement(event.mediaElement, {
+        title: event.userid,
+        buttons: ['full-screen'],
+        width: width1,
+        showOnMouseEnter: false
+    });
+
+    connection1.audiosContainer.appendChild(mediaElement1);
+
+    setTimeout(function() {
+        mediaElement1.media.play();
+    }, 5000);
+
+    mediaElement1.id = event.streamid;
+};
+
+connection1.onstreamended = function(event) {
+    var mediaElement1 = document.getElementById(event.streamid);
+    if (mediaElement1) {
+        mediaElement1.parentNode.removeChild(mediaElement1);
+    }
+};
+
+function disableInputButtons() {
+    document.getElementById('open-or-join-room1').disabled = true;
+    document.getElementById('open-room1').disabled = true;
+    document.getElementById('join-room1').disabled = true;
+    document.getElementById('room-id1').disabled = true;
+}
+
+
+(function() {
+    var params = {},
+        r = /([^&=]+)=?([^&]*)/g;
+
+    function d(s) {
+        return decodeURIComponent(s.replace(/\+/g, ' '));
+    }
+    var match, search = window.location.search;
+    while (match = r.exec(search.substring(1)))
+        params[d(match[1])] = d(match[2]);
+    window.params = params;
+})();
+
+var roomid1 = '';
+if (localStorage.getItem(connection1.socketMessageEvent)) {
+    roomid1 = localStorage.getItem(connection1.socketMessageEvent);
+} else {
+    roomid1 = connection1.token();
+}
+document.getElementById('room-id1').value = roomid1;
+document.getElementById('room-id1').onkeyup = function() {
+    localStorage.setItem(connection1.socketMessageEvent, this.value);
+};
+
+var hashString = location.hash.replace('#', '');
+if (hashString.length && hashString.indexOf('comment-') == 0) {
+    hashString = '';
+}
+
+var roomid1 = params.roomid1;
+if (!roomid1 && hashString.length) {
+    roomid1 = hashString;
+}
+
+if (roomid1 && roomid1.length) {
+    document.getElementById('room-id1').value = roomid1;
+    localStorage.setItem(connection1.socketMessageEvent, roomid1);
+
+    // auto-join-room
+    (function reCheckRoomPresence() {
+        connection1.checkPresence(roomid1, function(isRoomExist) {
+            if (isRoomExist) {
+                connection1.join(roomid1);
+                return;
+            }
+
+            setTimeout(reCheckRoomPresence, 5000);
+        });
+    })();
+
+    disableInputButtons();
+}
+</script>
+
+
+<section class="make-center">
+    <div align="center">
+    <input type="text" id="room-id" value="error.." autocorrect=off autocapitalize=off size=20>
+    <button id="open-room">share screen</button>
+    <button id="join-room">view screen</button></div>
+    <p id="open-or-join-room"></p>
+
+    <div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;"></div>
+
+    <div id="audios-container"></div>
+  </section>
+
+<script src="/dist/RTCMultiConnection.min.js"></script>
+<script src="/node_modules/webrtc-adapter/out/adapter.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<link rel="stylesheet" href="/dev/getHTMLMediaElement.css">
+<script src="/dev/getHTMLMediaElement.js"></script>
+<script>
+
+document.getElementById('open-room').onclick = function() {
+    disableInputButtons();
+    connection.open(document.getElementById('room-id').value, function() {
+        showRoomURL(connection.sessionid);
+    });
+};
+
+document.getElementById('join-room').onclick = function() {
+    disableInputButtons();
+    connection.join(document.getElementById('room-id').value);
+};
+
+document.getElementById('open-or-join-room').onclick = function() {
+    disableInputButtons();
+    connection.openOrJoin(document.getElementById('room-id').value, function(isRoomExist, roomid) {
+        if (!isRoomExist) {
+            showRoomURL(roomid);
+        }
+    });
+};
+
+
+var connection = new RTCMultiConnection();
+
+connection.socketURL = '/';
+connection.socketMessageEvent = 'audio-conference-demo';
+
+connection.session = {
+    screen:true,
+    oneway:true,
+};
+
+connection.mediaConstraints = {
+    audio: true,
+    video: false
+};
+
+connection.sdpConstraints.mandatory = {
+    OfferToReceiveAudio: true,
+    OfferToReceiveVideo: false
+};
+
+connection.iceServers = [{
+    'urls': [
+        'stun:stun.l.google.com:19302',
+        'stun:stun1.l.google.com:19302',
+        'stun:stun2.l.google.com:19302',
+        'stun:stun.l.google.com:19302?transport=udp',
+    ]
+}];
+
+connection.audiosContainer = document.getElementById('audios-container');
+connection.onstream = function(event) {
+    var width = parseInt(connection.audiosContainer.clientWidth / 2) - 20;
+    var mediaElement = getHTMLMediaElement(event.mediaElement, {
+        title: event.userid,
+        buttons: ['full-screen'],
+        width: width,
+        showOnMouseEnter: false
+    });
+
+    connection.audiosContainer.appendChild(mediaElement);
+
+    setTimeout(function() {
+        mediaElement.media.play();
+    }, 5000);
+
+    mediaElement.id = event.streamid;
+};
+
+connection.onstreamended = function(event) {
+    var mediaElement = document.getElementById(event.streamid);
+    if (mediaElement) {
+        mediaElement.parentNode.removeChild(mediaElement);
+    }
+};
+
+
+function disableInputButtons() {
+    document.getElementById('open-or-join-room').disabled = true;
+    document.getElementById('open-room').disabled = true;
+    document.getElementById('join-room').disabled = true;
+    document.getElementById('room-id').disabled = true;
+}
+
+
+(function() {
+    var params = {},
+        r = /([^&=]+)=?([^&]*)/g;
+
+    function d(s) {
+        return decodeURIComponent(s.replace(/\+/g, ' '));
+    }
+    var match, search = window.location.search;
+    while (match = r.exec(search.substring(1)))
+        params[d(match[1])] = d(match[2]);
+    window.params = params;
+})();
+
+var roomid = '';
+if (localStorage.getItem(connection.socketMessageEvent)) {
+    roomid = localStorage.getItem(connection.socketMessageEvent);
+} else {
+    roomid = connection.token();
+}
+document.getElementById('room-id').value = roomid;
+document.getElementById('room-id').onkeyup = function() {
+    localStorage.setItem(connection.socketMessageEvent, this.value);
+};
+
+var hashString = location.hash.replace('#', '');
+if (hashString.length && hashString.indexOf('comment-') == 0) {
+    hashString = '';
+}
+
+var roomid = params.roomid;
+if (!roomid && hashString.length) {
+    roomid = hashString;
+}
+
+if (roomid && roomid.length) {
+    document.getElementById('room-id').value = roomid;
+    localStorage.setItem(connection.socketMessageEvent, roomid);
+
+    // auto-join-room
+    (function reCheckRoomPresence() {
+        connection.checkPresence(roomid, function(isRoomExist) {
+            if (isRoomExist) {
+                connection.join(roomid);
+                return;
+            }
+
+            setTimeout(reCheckRoomPresence, 5000);
+        });
+    })();
+
+    disableInputButtons();
+}
+</script>
+
+</body>
+</html>
