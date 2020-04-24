@@ -349,10 +349,10 @@ connection1.sdpConstraints.mandatory = {
     OfferToReceiveVideo: false
 };
 
-connection1.iceServers = [ {
+connection1.iceServers = {
     url: 'turn:ubuntu@18.217.52.68:3478',
     credential: 'root'
-}];
+}
 
 
 connection1.audiosContainer = document.getElementById('audios-container');
@@ -558,10 +558,10 @@ connection.sdpConstraints.mandatory = {
     OfferToReceiveVideo: false
 };
 
-connection.iceServers = [ {
+connection.iceServers = {
     url: 'turn:ubuntu@18.217.52.68:3478',
     credential: 'root'
-}];
+}
 
 connection.audiosContainer = document.getElementById('audios-container');
 connection.onstream = function(event) {
