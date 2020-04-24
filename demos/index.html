@@ -349,13 +349,9 @@ connection1.sdpConstraints.mandatory = {
     OfferToReceiveVideo: false
 };
 
-connection1.iceServers = [{
-    'urls': [
-        'stun:stun.l.google.com:19302',
-        'stun:stun1.l.google.com:19302',
-        'stun:stun2.l.google.com:19302',
-        'stun:stun.l.google.com:19302?transport=udp',
-    ]
+connection1.iceServers = [ {
+    url: 'turn:ubuntu@18.217.52.68:3478',
+    credential: 'root'
 }];
 
 
@@ -562,13 +558,9 @@ connection.sdpConstraints.mandatory = {
     OfferToReceiveVideo: false
 };
 
-connection.iceServers = [{
-    'urls': [
-        'stun:stun.l.google.com:19302',
-        'stun:stun1.l.google.com:19302',
-        'stun:stun2.l.google.com:19302',
-        'stun:stun.l.google.com:19302?transport=udp',
-    ]
+connection.iceServers = [ {
+    url: 'turn:ubuntu@18.217.52.68:3478',
+    credential: 'root'
 }];
 
 connection.audiosContainer = document.getElementById('audios-container');
